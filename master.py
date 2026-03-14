@@ -218,12 +218,12 @@ col1, col2 = st.columns(2)
 
 with col1:
      st.subheader("🌐 Network Performance Monitoring")
-    col1, col2 = st.columns(2)
+     col1, col2 = st.columns(2)
  # Latency
      latency_data = pd.DataFrame({
       "time": range(50),
       "latency":[random.randint(10,120) for _ in range(50)]
-   })
+    })
 
     fig_latency = px.line(latency_data,x="time",y="latency",title="Network Latency (ms)")
     col1.plotly_chart(fig_latency,use_container_width=True)
@@ -235,7 +235,7 @@ with col1:
     })
 
    fig_req = px.line(req_data,x="time",y="requests",title="Request Rate")
-    col2.plotly_chart(fig_req,use_container_width=True)
+   col2.plotly_chart(fig_req,use_container_width=True)
 
 # -------------------------
 # BLOCKED IP LIST
