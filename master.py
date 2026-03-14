@@ -241,7 +241,7 @@ st.markdown("---")
 st.subheader("🖥️ Live Security Log Monitor")
 
 # Generate 100 logs
-log_rows = 100
+log_rows = 1000
 
 logs = pd.DataFrame({
     "Time":[datetime.now().strftime("%H:%M:%S") for _ in range(log_rows)],
