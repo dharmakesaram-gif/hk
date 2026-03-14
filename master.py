@@ -5,7 +5,8 @@ import random
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
-
+from streamlit_autorefresh import st_autorefresh
+st_autorefresh(interval=3000, key="log_refresh")
 st.set_page_config(
     page_title="AI Cyber Defense System",
     page_icon="🛡️",
@@ -242,3 +243,34 @@ st.dataframe(alerts, use_container_width=True)
 st.markdown("---")
 
 st.success("System Operational — All Agents Running")
+st.markdown("---")
+st.subheader("🖥️ Live Security Log Monitor")
+
+import pandas as pd
+import random
+from datetime import datetime
+
+# Simulated logs (later you will read from file)
+log_data = pd.DataFrame({
+    "Time":[
+        datetime.now().strftime("%H:%M:%S") for _ in range(6)
+    ],
+    "Event":[
+        random.choice([
+            "Failed login attempt",
+            "Suspicious IP detected",
+            "Port scan detected",
+            "User login success",
+            "Malware signature detected",
+            "Firewall blocked IP"
+        ]) for _ in range(6)
+    ],
+    "Source IP":[
+        f"192.168.1.{random.randint(1,255)}" for _ in range(6)
+    ],
+    "Status":[
+        random.choice(["INFO","WARNING","CRITICAL"]) for _ in range(6)
+    ]
+})
+
+st.dataframe(log_data, use_container_width=True)
