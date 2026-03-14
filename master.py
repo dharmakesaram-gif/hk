@@ -217,25 +217,75 @@ st.markdown("---")
 col1, col2 = st.columns(2)
 
 with col1:
-     st.subheader("🌐 Network Performance Monitoring")
-     col1, col2 = st.columns(2)
- # Latency
-     latency_data = pd.DataFrame({
-      "time": range(50),
-      "latency":[random.randint(10,120) for _ in range(50)]
+    st.markdown("---")
+st.subheader("🌐 Network Performance Monitoring")
+
+# Row 1
+col1, col2 = st.columns(2)
+
+with col1:
+    latency_data = pd.DataFrame({
+        "time": list(range(50)),
+        "latency": [random.randint(10,120) for _ in range(50)]
     })
 
-    fig_latency = px.line(latency_data,x="time",y="latency",title="Network Latency (ms)")
-    col1.plotly_chart(fig_latency,use_container_width=True)
+    fig_latency = px.line(
+        latency_data,
+        x="time",
+        y="latency",
+        title="Network Latency (ms)"
+    )
 
-# Request Rate
-    req_data = pd.DataFrame({
-       "time": range(50),
-       "requests":[random.randint(100,800) for _ in range(50)]
+    st.plotly_chart(fig_latency, use_container_width=True)
+
+with col2:
+    request_data = pd.DataFrame({
+        "time": list(range(50)),
+        "requests": [random.randint(100,900) for _ in range(50)]
     })
 
-   fig_req = px.line(req_data,x="time",y="requests",title="Request Rate")
-   col2.plotly_chart(fig_req,use_container_width=True)
+    fig_requests = px.line(
+        request_data,
+        x="time",
+        y="requests",
+        title="Request Rate"
+    )
+
+    st.plotly_chart(fig_requests, use_container_width=True)
+
+
+# Row 2
+col3, col4 = st.columns(2)
+
+with col3:
+    error_data = pd.DataFrame({
+        "time": list(range(50)),
+        "error_ratio": [random.uniform(0,0.2) for _ in range(50)]
+    })
+
+    fig_error = px.line(
+        error_data,
+        x="time",
+        y="error_ratio",
+        title="Error Ratio"
+    )
+
+    st.plotly_chart(fig_error, use_container_width=True)
+
+with col4:
+    duration_data = pd.DataFrame({
+        "time": list(range(50)),
+        "duration": [random.randint(1,15) for _ in range(50)]
+    })
+
+    fig_duration = px.line(
+        duration_data,
+        x="time",
+        y="duration",
+        title="Connection Duration"
+    )
+
+    st.plotly_chart(fig_duration, use_container_width=True)
 
 # -------------------------
 # BLOCKED IP LIST
