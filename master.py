@@ -69,8 +69,6 @@ col4.metric(
 )
 
 st.markdown("---")
-st.markdown("### 🔎 Threat Analysis Mode")
-
 mode = st.radio(
     "Select Threat Type",
     ["Login Attacks", "Network Attacks", "Malware Activity", "Port Scans"],
