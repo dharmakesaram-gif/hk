@@ -217,37 +217,25 @@ st.markdown("---")
 col1, col2 = st.columns(2)
 
 with col1:
+     st.subheader("🌐 Network Performance Monitoring")
+    col1, col2 = st.columns(2)
+ # Latency
+     latency_data = pd.DataFrame({
+      "time": range(50),
+      "latency":[random.randint(10,120) for _ in range(50)]
+   })
 
-    st.subheader("👤 User Behavior Risk Scores")
+    fig_latency = px.line(latency_data,x="time",y="latency",title="Network Latency (ms)")
+    col1.plotly_chart(fig_latency,use_container_width=True)
 
-    users = pd.DataFrame({
-        "User":[
-            "admin",
-            "john",
-            "guest",
-            "developer",
-            "finance"
-        ],
-        "Risk Score":[
-            random.randint(10,90),
-            random.randint(10,90),
-            random.randint(10,90),
-            random.randint(10,90),
-            random.randint(10,90)
-        ]
+# Request Rate
+    req_data = pd.DataFrame({
+       "time": range(50),
+       "requests":[random.randint(100,800) for _ in range(50)]
     })
 
-    fig3 = px.bar(
-        users,
-        x="User",
-        y="Risk Score",
-        color="Risk Score",
-        color_continuous_scale="reds"
-    )
-
-    fig3.update_layout(height=350)
-
-    st.plotly_chart(fig3, use_container_width=True)
+   fig_req = px.line(req_data,x="time",y="requests",title="Request Rate")
+    col2.plotly_chart(fig_req,use_container_width=True)
 
 # -------------------------
 # BLOCKED IP LIST
