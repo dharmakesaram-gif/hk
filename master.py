@@ -5,7 +5,10 @@ import plotly.express as px
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 
-# auto refresh
+# ------------------------------------------------
+# AUTO REFRESH
+# ------------------------------------------------
+
 st_autorefresh(interval=3000, key="refresh")
 
 st.set_page_config(
@@ -13,6 +16,35 @@ st.set_page_config(
     page_icon="🛡️",
     layout="wide"
 )
+
+# ------------------------------------------------
+# FORCE BLACK THEME
+# ------------------------------------------------
+
+st.markdown("""
+<style>
+
+.stApp {
+    background-color: #000000;
+    color: white;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #000000;
+}
+
+[data-testid="stHeader"] {
+    background-color: #000000;
+}
+
+[data-testid="stMetric"] {
+    background-color: #111111;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ------------------------------------------------
 # HEADER
@@ -46,8 +78,6 @@ st.sidebar.success("Log Agent Active")
 st.sidebar.success("Behavior Agent Active")
 st.sidebar.success("Response Agent Active")
 
-st.sidebar.markdown("---")
-
 st.sidebar.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # ------------------------------------------------
@@ -80,9 +110,7 @@ with col1:
         "login success"
     ]
 
-    failed = logs.count("login failed")
-
-    if failed >= 3:
+    if logs.count("login failed") >= 3:
 
         st.info("""
 Threat detected  
@@ -98,7 +126,7 @@ Admin alerted
 
         st.success("""
 AI Explanation  
-Multiple failed login attempts from the same IP indicate brute force behaviour.
+Multiple failed login attempts from same IP indicate brute force behaviour.
 """)
 
         threat_ip = "185.23.44.21"
@@ -115,86 +143,107 @@ Multiple failed login attempts from the same IP indicate brute force behaviour.
     else:
         st.success("No threat detected")
 
-
 with col2:
 
     st.subheader("⚠️ Threat Type Distribution")
 
     threats = pd.DataFrame({
-        "Attack Type":[
-            "DDoS",
-            "Brute Force",
-            "Malware",
-            "Port Scan",
-            "Phishing"
-        ],
+        "Attack Type":["DDoS","Brute Force","Malware","Port Scan","Phishing"],
         "Count":[random.randint(5,40) for _ in range(5)]
     })
 
     fig = px.pie(threats,names="Attack Type",values="Count",hole=0.5)
+
+    fig.update_layout(
+        template="plotly_dark",
+        plot_bgcolor="#000000",
+        paper_bgcolor="#000000"
+    )
 
     st.plotly_chart(fig,use_container_width=True)
 
 st.markdown("---")
 
 # ------------------------------------------------
-# NETWORK PERFORMANCE SELECTOR
+# NETWORK PERFORMANCE GRAPH
 # ------------------------------------------------
 
 st.subheader("🌐 Network Performance Monitoring")
 
 metric = st.selectbox(
     "Select Network Metric",
-    ["Latency","Request Rate","Error Ratio","Connection Duration"]
+    ["Latency","Error Ratio","Request Rate"]
 )
 
 if metric == "Latency":
 
     data = pd.DataFrame({
-        "time":range(50),
-        "latency":[random.randint(10,120) for _ in range(50)]
+        "time": range(40),
+        "latency":[random.randint(10,80) for _ in range(40)]
     })
 
-    fig = px.line(data,x="time",y="latency",title="Network Latency (ms)")
-    st.plotly_chart(fig,use_container_width=True)
+    fig = px.line(data,x="time",y="latency")
 
+    fig.update_traces(line=dict(color="#FF8C42",width=3),fill="tozeroy")
 
-elif metric == "Request Rate":
+    fig.update_layout(
+        title="Latency (P95)",
+        template="plotly_dark",
+        plot_bgcolor="#000000",
+        paper_bgcolor="#000000",
+        height=300
+    )
 
-    data = pd.DataFrame({
-        "time":range(50),
-        "requests":[random.randint(100,900) for _ in range(50)]
-    })
-
-    fig = px.line(data,x="time",y="requests",title="Request Rate")
     st.plotly_chart(fig,use_container_width=True)
 
 
 elif metric == "Error Ratio":
 
     data = pd.DataFrame({
-        "time":range(50),
-        "error_ratio":[random.uniform(0,0.2) for _ in range(50)]
+        "time": range(40),
+        "error":[random.uniform(0,1) for _ in range(40)]
     })
 
-    fig = px.line(data,x="time",y="error_ratio",title="Error Ratio")
+    fig = px.line(data,x="time",y="error")
+
+    fig.update_traces(line=dict(color="#E02F44",width=3),fill="tozeroy")
+
+    fig.update_layout(
+        title="Error Ratio",
+        template="plotly_dark",
+        plot_bgcolor="#000000",
+        paper_bgcolor="#000000",
+        height=300
+    )
+
     st.plotly_chart(fig,use_container_width=True)
 
 
-elif metric == "Connection Duration":
+elif metric == "Request Rate":
 
     data = pd.DataFrame({
-        "time":range(50),
-        "duration":[random.randint(1,15) for _ in range(50)]
+        "time": range(40),
+        "req":[random.uniform(0,3) for _ in range(40)]
     })
 
-    fig = px.line(data,x="time",y="duration",title="Connection Duration")
+    fig = px.line(data,x="time",y="req")
+
+    fig.update_traces(line=dict(color="#1FC7D4",width=3),fill="tozeroy")
+
+    fig.update_layout(
+        title="Request Rate",
+        template="plotly_dark",
+        plot_bgcolor="#000000",
+        paper_bgcolor="#000000",
+        height=300
+    )
+
     st.plotly_chart(fig,use_container_width=True)
 
 st.markdown("---")
 
 # ------------------------------------------------
-# LIVE NETWORK MAP
+# SERVER INFRASTRUCTURE PANEL
 # ------------------------------------------------
 
 st.subheader("🗺️ Server Infrastructure Map")
@@ -216,20 +265,10 @@ servers = pd.DataFrame({
         "Active",
         "Monitoring"
     ],
-    "Load":[
-        random.randint(20,70),
-        random.randint(20,70),
-        random.randint(20,70),
-        random.randint(20,70),
-        random.randint(20,70),
-        random.randint(20,70)
-    ]
+    "Load":[random.randint(20,70) for _ in range(6)]
 })
 
-st.dataframe(
-    servers,
-    use_container_width=True
-)
+st.dataframe(servers,use_container_width=True)
 
 st.markdown("---")
 
@@ -237,11 +276,9 @@ st.markdown("---")
 # LIVE SECURITY LOGS
 # ------------------------------------------------
 
-st.markdown("---")
 st.subheader("🖥️ Live Security Log Monitor")
 
-# Generate 100 logs
-log_rows = 1000
+log_rows = 100
 
 logs = pd.DataFrame({
     "Time":[datetime.now().strftime("%H:%M:%S") for _ in range(log_rows)],
@@ -257,13 +294,13 @@ logs = pd.DataFrame({
     "Status":[random.choice(["INFO","WARNING","CRITICAL"]) for _ in range(log_rows)]
 })
 
-# Filter logs if a mode is selected
 if mode != "All Traffic":
     logs = logs[logs["Event"].str.contains(mode.split()[0], case=False)]
 
-# Scrollable table
 st.dataframe(
     logs,
     use_container_width=True,
     height=400
 )
+
+st.success("System Operational — All Agents Running")
