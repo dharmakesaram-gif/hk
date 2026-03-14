@@ -197,15 +197,39 @@ st.markdown("---")
 # LIVE NETWORK MAP
 # ------------------------------------------------
 
-st.subheader("🌍 Live Network Data Transfer Map")
+st.subheader("🗺️ Server Infrastructure Map")
 
-map_data = pd.DataFrame({
-    "lat":[37.77,55.75,28.61,35.68],
-    "lon":[-122.41,37.61,77.20,139.69],
-    "traffic":[random.randint(100,800) for _ in range(4)]
+servers = pd.DataFrame({
+    "Server":[
+        "Web Server",
+        "API Gateway",
+        "Authentication Server",
+        "Database Server",
+        "Firewall",
+        "Threat Detection Engine"
+    ],
+    "Status":[
+        "Active",
+        "Active",
+        "Active",
+        "Active",
+        "Active",
+        "Monitoring"
+    ],
+    "Load":[
+        random.randint(20,70),
+        random.randint(20,70),
+        random.randint(20,70),
+        random.randint(20,70),
+        random.randint(20,70),
+        random.randint(20,70)
+    ]
 })
 
-st.map(map_data)
+st.dataframe(
+    servers,
+    use_container_width=True
+)
 
 st.markdown("---")
 
@@ -213,31 +237,33 @@ st.markdown("---")
 # LIVE SECURITY LOGS
 # ------------------------------------------------
 
+st.markdown("---")
 st.subheader("🖥️ Live Security Log Monitor")
 
+# Generate 100 logs
+log_rows = 100
+
 logs = pd.DataFrame({
-    "Time":[datetime.now().strftime("%H:%M:%S") for _ in range(12)],
+    "Time":[datetime.now().strftime("%H:%M:%S") for _ in range(log_rows)],
     "Event":[
         random.choice([
             "Login Attack",
             "Network Attack",
             "Port Scan",
             "Malware Activity"
-        ]) for _ in range(12)
+        ]) for _ in range(log_rows)
     ],
-    "Source IP":[f"192.168.1.{random.randint(1,255)}" for _ in range(12)],
-    "Status":[random.choice(["INFO","WARNING","CRITICAL"]) for _ in range(12)]
+    "Source IP":[f"192.168.1.{random.randint(1,255)}" for _ in range(log_rows)],
+    "Status":[random.choice(["INFO","WARNING","CRITICAL"]) for _ in range(log_rows)]
 })
 
-# filter logs based on selected mode
-
+# Filter logs if a mode is selected
 if mode != "All Traffic":
     logs = logs[logs["Event"].str.contains(mode.split()[0], case=False)]
 
+# Scrollable table
 st.dataframe(
     logs,
     use_container_width=True,
-    height=300
+    height=400
 )
-
-st.success("System Operational — All Agents Running")
